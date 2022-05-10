@@ -41,23 +41,22 @@ android {
 }
 
 dependencies {
-    val compose_version = "1.1.1"
+    val composeVersion = "1.1.1"
 
     implementation(project(":shared"))
-    implementation("com.google.android.material:material:1.5.0")
-    implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.3")
-    implementation("androidx.activity:activity-ktx:1.4.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
-
-
 
     implementation("androidx.activity:activity-compose:1.4.0")
-    implementation("androidx.compose.ui:ui:$compose_version")
-    implementation("androidx.compose.ui:ui-tooling:$compose_version")
-    implementation("androidx.compose.material:material:$compose_version")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
-    implementation ("androidx.compose.runtime:runtime-livedata:$compose_version")
 
-    implementation ("com.google.accompanist:accompanist-swiperefresh:0.24.7-alpha")
+    implementation("androidx.compose.ui:ui:$composeVersion")
+    debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
+    implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
+    implementation ("androidx.compose.runtime:runtime-livedata:$composeVersion")
+
+    implementation("androidx.compose.material:material:$composeVersion")
+    implementation ("androidx.compose.material:material-icons-extended:$composeVersion")
+
+
+    compileOnly("io.realm.kotlin:library-sync:0.11.0")
 }

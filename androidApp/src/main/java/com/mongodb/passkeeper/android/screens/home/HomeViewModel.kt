@@ -1,4 +1,4 @@
-package com.mongodb.passkeeper.android
+package com.mongodb.passkeeper.android.screens.home
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
-
 
     private val _currentPassword = MutableLiveData<String>()
     val currentPassword = _currentPassword
@@ -26,6 +25,15 @@ class HomeViewModel : ViewModel() {
 
     private fun getNewPassword() {
         _currentPassword.value = getNewPassword(13)
+    }
+
+    fun getSavedPasswords() {
+
+    }
+
+    fun onSavePassword(pass: String, url: String, name: String) {
+
+
     }
 
 }
