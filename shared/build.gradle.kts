@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     id("com.android.library")
+    id("io.realm.kotlin")
 }
 
 version = "1.0"
@@ -21,9 +22,17 @@ kotlin {
             baseName = "shared"
         }
     }
-    
+
+    val coroutinesVersion = "1.6.0-native-mt"
+
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                implementation("io.realm.kotlin:library-sync:0.11.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+            }
+        }
+
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
