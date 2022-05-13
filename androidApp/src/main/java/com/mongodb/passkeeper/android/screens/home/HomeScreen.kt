@@ -7,13 +7,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mongodb.passkeeper.android.R
 import com.mongodb.passkeeper.android.ui.theme.PassKeeperTheme
+import com.mongodb.passkeeper.models.PasswordInfo
 
 class HomeScreen : ComponentActivity() {
 
@@ -37,6 +38,7 @@ class HomeScreen : ComponentActivity() {
 
             val viewModel: HomeViewModel = viewModel()
             val currentPassword: String = viewModel.currentPassword.observeAsState("").value
+            val passwordList = viewModel.savedPasswords.observeAsState(initial = emptyList()).value
 
             PassKeeperTheme {
                 Scaffold(topBar = {
@@ -54,9 +56,19 @@ class HomeScreen : ComponentActivity() {
                             .fillMaxSize()
                             .padding(it),
                     ) {
-                        NewPasswordView(currentPassword) {
-                            viewModel.onRefreshPassword()
-                        }
+
+                        NewPasswordView(
+                            password = currentPassword,
+                            onRefreshClick = { viewModel.onRefreshPassword() },
+                            onSavePasswordClick = { name: String, password: String, url: String ->
+                                viewModel.onSavePassword(
+                                    name = name,
+                                    pass = password,
+                                    url = url
+                                )
+                            })
+
+
 
                         Divider(
                             color = Color.LightGray,
@@ -76,21 +88,8 @@ class HomeScreen : ComponentActivity() {
                         )
 
                         LazyColumn(content = {
-                            item {
-                                listItemView()
-                                listItemView()
-                                listItemView()
-                                listItemView()
-                                listItemView()
-                                listItemView()
-                                listItemView()
-                                listItemView()
-                                listItemView()
-                                listItemView()
-                                listItemView()
-                                listItemView()
-                                listItemView()
-                                listItemView()
+                            items(items = passwordList){ item ->
+                                listItemView(item)
                             }
                         })
                     }
@@ -101,7 +100,11 @@ class HomeScreen : ComponentActivity() {
 }
 
 @Composable
-fun NewPasswordView(password: String, onRefreshClick: () -> Unit) {
+fun NewPasswordView(
+    password: String,
+    onRefreshClick: () -> Unit,
+    onSavePasswordClick: (name: String, password: String, url: String) -> Unit
+) {
 
     Column(
         modifier = Modifier
@@ -162,7 +165,7 @@ fun NewPasswordView(password: String, onRefreshClick: () -> Unit) {
                     onClick = {
                         onAddClicked = !onAddClicked
                         onRefreshClick()
-                        //TODO : Call viewmodel
+                        onSavePasswordClick(websiteName, password, websiteUrl)
                     }) {
                     Text(text = "Save")
                 }
@@ -186,11 +189,12 @@ fun NewPasswordView(password: String, onRefreshClick: () -> Unit) {
         }
 
     }
+
 }
 
-@Preview(showBackground = true)
+
 @Composable
-fun listItemView() {
+fun listItemView(item: PasswordInfo) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -201,7 +205,7 @@ fun listItemView() {
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = "Realm",
+            value = item.password,
             onValueChange = {},
             readOnly = true,
             trailingIcon = {
@@ -219,7 +223,7 @@ fun listItemView() {
                 )
             },
             visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
-            label = { Text(text = "Website 1") }
+            label = { Text(text = item.name) }
         )
     }
 }

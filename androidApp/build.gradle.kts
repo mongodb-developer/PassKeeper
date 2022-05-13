@@ -57,6 +57,7 @@ dependencies {
     implementation("androidx.compose.material:material:$composeVersion")
     implementation ("androidx.compose.material:material-icons-extended:$composeVersion")
 
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
 
     compileOnly("io.realm.kotlin:library-sync:0.11.0")
 }
