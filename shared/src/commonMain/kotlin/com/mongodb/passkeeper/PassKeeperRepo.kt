@@ -1,5 +1,7 @@
 package com.mongodb.passkeeper
 
+import CommonFlow
+import asCommonFlow
 import com.mongodb.passkeeper.models.PasswordInfo
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -8,7 +10,6 @@ import io.realm.mongodb.App
 import io.realm.mongodb.Credentials
 import io.realm.mongodb.User
 import io.realm.mongodb.sync.SyncConfiguration
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class PassKeeperRepo {
@@ -48,7 +49,7 @@ class PassKeeperRepo {
         val user = realmOnCloud.currentUser ?: return
 
         val info = PasswordInfo().apply {
-            _id = "2123"
+            _id = RandomUUID().randomId
             this.url = url
             this.password = password
             this.name = name
@@ -64,14 +65,14 @@ class PassKeeperRepo {
         }
     }
 
-    fun getAllPassword(): Flow<List<PasswordInfo>> {
+    fun getAllPassword(): CommonFlow<List<PasswordInfo>> {
         val user = realmOnCloud.currentUser!!
         val config = SyncConfiguration.Builder(user, user.identity, setOf(PasswordInfo::class))
             .build()
         val realm = Realm.open(config)
         return realm.query(PasswordInfo::class).asFlow().map {
             it.list
-        }
+        }.asCommonFlow()
     }
 
 }
