@@ -1,7 +1,7 @@
 import SwiftUI
 import shared
 
-struct ContentView: View {
+struct LoginScreenView: View {
 	
     @State var userId : String = ""
     @State var password : String = ""
@@ -45,7 +45,7 @@ struct ContentView: View {
                 )
                 
                 
-                NavigationLink(destination: HomeScreenUI(), tag: 1, selection: $goToNextScreen){
+                NavigationLink(destination: HomeScreenView(), tag: 1, selection: $goToNextScreen){
                         EmptyView()
                 }
                 
@@ -64,7 +64,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
 	static var previews: some View {
-            ContentView()
+            LoginScreenView()
     }
 }
 

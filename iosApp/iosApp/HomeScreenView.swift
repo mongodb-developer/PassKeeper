@@ -9,7 +9,7 @@
 import SwiftUI
 import shared
 
-struct HomeScreenUI: View {
+struct HomeScreenView: View {
     
     @State var randomPassword = ""
     @State var addPassword = false
@@ -158,7 +158,7 @@ struct HomeScreenUI: View {
     
     struct HomeScreenUI_Previews: PreviewProvider {
         static var previews: some View {
-            HomeScreenUI()
+            HomeScreenView()
         }
     }
     
