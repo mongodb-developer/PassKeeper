@@ -115,7 +115,6 @@ struct HomeScreenView: View {
                 HStack {
                         VStack(alignment: .leading) {
                             Text(info.name)
-                            Text(info.url).font(.subheadline).foregroundColor(.gray)
                             
                             if(selectedItemId == info._id){
                                 Text(info.password)
