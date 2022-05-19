@@ -8,10 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -59,10 +56,14 @@ class LoginActivity : ComponentActivity() {
 
             val userName = remember { mutableStateOf("") }
             val password = remember { mutableStateOf("") }
+            var showProgress by remember { mutableStateOf(false) }
+
+
             val loginViewModel = viewModel<LoginViewModel>()
 
             loginViewModel.loginStatus.observeAsState(false).apply {
                 if (this.value) {
+                    showProgress = false
                     navigateToHome()
                 }
             }
@@ -105,9 +106,14 @@ class LoginActivity : ComponentActivity() {
             )
 
             Button(onClick = {
+                showProgress = true
                 loginViewModel.doLogin(userName.value, password.value)
             }) {
                 Text(text = "Login")
+            }
+
+            if(showProgress){
+                CircularProgressIndicator()
             }
         }
     }

@@ -6,6 +6,7 @@ struct LoginScreenView: View {
     @State var userId : String = ""
     @State var password : String = ""
     @State var goToNextScreen : Int? = nil
+    @State var showProgress = false
     
     var repo = PassKeeperRepo()
     
@@ -30,7 +31,12 @@ struct LoginScreenView: View {
                 
                 
                 Button("Login"){
+                    showProgress = true
+                    
                     repo.login(userName: $userId.wrappedValue, password: $password.wrappedValue) { user, error in
+                        
+                        showProgress = false
+                        
                         if(user != nil){
                             print("login success")
                             goToNextScreen = 1
@@ -44,6 +50,9 @@ struct LoginScreenView: View {
                     .stroke(Color.blue, lineWidth: 1)
                 )
                 
+                if(showProgress){
+                    ProgressView()
+                }
                 
                 NavigationLink(destination: HomeScreenView(), tag: 1, selection: $goToNextScreen){
                         EmptyView()
