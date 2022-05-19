@@ -83,15 +83,6 @@ struct HomeScreenView: View {
                     )
                     
                 }else{
-                    Button("Refresh") {
-                        getNewRandomPassword()
-                    }
-                    .padding(10)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.blue, lineWidth: 1)
-                    )
-                    
                     
                     Button("Add") {
                         self.addPassword = !self.addPassword
@@ -101,6 +92,17 @@ struct HomeScreenView: View {
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.blue, lineWidth: 1)
                     )
+                    
+                    
+                    Button("Refresh") {
+                        getNewRandomPassword()
+                    }
+                    .padding(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.blue, lineWidth: 1)
+                    )
+                    
                 }
             }
             
