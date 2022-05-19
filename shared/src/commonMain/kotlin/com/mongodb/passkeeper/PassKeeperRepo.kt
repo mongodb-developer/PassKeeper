@@ -70,8 +70,9 @@ class PassKeeperRepo {
         val config = SyncConfiguration.Builder(user, user.identity, setOf(PasswordInfo::class))
             .build()
         val realm = Realm.open(config)
-        return realm.query(PasswordInfo::class).asFlow().map {
-            it.list
+        return realm.query(PasswordInfo::class)
+            .asFlow().map {
+            it.list.reversed()
         }.asCommonFlow()
     }
 
