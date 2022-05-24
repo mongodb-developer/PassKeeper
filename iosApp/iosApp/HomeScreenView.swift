@@ -28,6 +28,9 @@ struct HomeScreenView: View {
         
         VStack{
             
+            Spacer()
+                .frame(height: 50)
+            
             Text(randomPassword)
                 .padding(10)
                 .overlay(
@@ -139,6 +142,10 @@ struct HomeScreenView: View {
             getSavedPassword()
             getNewRandomPassword()
         }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitle("MongoPass",displayMode: .inline)
+        
+        
     }
     
     func getSavedPassword(){

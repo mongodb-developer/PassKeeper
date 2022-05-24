@@ -21,7 +21,7 @@ struct LoginScreenView: View {
                     .frame(width: 200, height: 100)
                 
                 
-                TextField("Enter Login Id", text: $userId)
+                TextField("Username", text: $userId)
                     .textFieldStyle(.roundedBorder)
                     .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                     
