@@ -1,10 +1,10 @@
 package com.mongodb.passkeeper.models
 
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.PrimaryKey
 
 
-class PasswordInfo : RealmObject {
+class PasswordInfo :  RealmObject {
 
     @PrimaryKey
     var _id: String = ""
@@ -15,6 +15,6 @@ class PasswordInfo : RealmObject {
 
     var name: String = ""
 
-    var _partitionKey: String = ""
+    var userId: String = ""
 
 }

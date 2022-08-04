@@ -59,5 +59,5 @@ dependencies {
 
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
 
-    compileOnly("io.realm.kotlin:library-sync:0.11.0")
+    compileOnly("io.realm.kotlin:library-sync:1.0.1")
 }
