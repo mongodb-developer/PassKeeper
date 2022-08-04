@@ -3,20 +3,27 @@ package com.mongodb.passkeeper
 import CommonFlow
 import asCommonFlow
 import com.mongodb.passkeeper.models.PasswordInfo
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.log.LogLevel
-import io.realm.mongodb.App
-import io.realm.mongodb.Credentials
-import io.realm.mongodb.User
-import io.realm.mongodb.sync.SyncConfiguration
+import io.realm.kotlin.Realm
+import io.realm.kotlin.RealmConfiguration
+import io.realm.kotlin.log.LogLevel
+import io.realm.kotlin.mongodb.App
+import io.realm.kotlin.mongodb.Credentials
+import io.realm.kotlin.mongodb.User
+import io.realm.kotlin.mongodb.sync.SyncConfiguration
 import kotlinx.coroutines.flow.map
 
 class PassKeeperRepo {
 
     private lateinit var realmOnDevice: Realm
-    private val realmOnCloud by lazy { App.create("passkeeper-realm-hlllm") }
 
+    private val realmApp by lazy { App.create("passkeeper-realm-hlllm") }
+
+    private val realm by lazy {
+        val user = realmApp.currentUser!!
+        val config = SyncConfiguration.Builder(user, user.identity, setOf(PasswordInfo::class))
+            .build()
+        Realm.open(config)
+    }
 
     init {
         realmOnDeviceSetup()
@@ -42,23 +49,19 @@ class PassKeeperRepo {
     }
 
     suspend fun login(userName: String, password: String): User {
-        return realmOnCloud.login(Credentials.emailPassword(userName, password))
+        return realmApp.login(Credentials.emailPassword(userName, password))
     }
 
     suspend fun saveInfo(name: String, url: String, password: String) {
-        val user = realmOnCloud.currentUser ?: return
+        val user = realmApp.currentUser ?: return
 
         val info = PasswordInfo().apply {
             _id = RandomUUID().randomId
             this.url = url
             this.password = password
             this.name = name
-            this._partitionKey = user.identity
+            this.userId = user.identity
         }
-
-        val config = SyncConfiguration.Builder(user, user.identity, setOf(PasswordInfo::class))
-            .build()
-        val realm = Realm.open(config)
 
         realm.write {
             copyToRealm(info)
@@ -66,14 +69,10 @@ class PassKeeperRepo {
     }
 
     fun getAllPassword(): CommonFlow<List<PasswordInfo>> {
-        val user = realmOnCloud.currentUser!!
-        val config = SyncConfiguration.Builder(user, user.identity, setOf(PasswordInfo::class))
-            .build()
-        val realm = Realm.open(config)
         return realm.query(PasswordInfo::class)
             .asFlow().map {
-            it.list.reversed()
-        }.asCommonFlow()
+                it.list.reversed()
+            }.asCommonFlow()
     }
 
 }
